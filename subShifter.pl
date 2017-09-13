@@ -1,109 +1,84 @@
 use warnings;
 use strict;
 
-my subfile = @ARGV[0];
 
-
-
-sub ExtractionDesFichiers($$)
-{
-   my ($FileName,$Path)=@_; # Tableau des paramètres 
-   open(F,$FileName) || die "Erreur d'ouverture du fichier $FileName\n";
-   my $str="";
-   my $str2="";
-   my $Num=0;
-
-   my $Go;
-
-   open(COL,">$Path/$Collection") || die "Erreur de creation de Collection\n";
-   while(!eof(F)){
-     if($str =~m /\.I\s/){ # On regarde si s$tr contient la chaîne .I
-        close(NF);
-        $str =~s/\.I\s//g; # Dans $str, on supprime la chaîne .I avant le numéro de document
-        $Num=$str;
-        print COL "CACM-$Num\n";
-        print "Processing ... CACM-$Num\n";
-        open(NF,">$Path/CACM-$Num");
-  open(NF2,">$Path/CACM-$Num.flt");
-     }
-     if(($str=~ m/\.T/) || ($str=~ m/\.A/) || ($str=~ m/\.W/) || ($str=~ m/\.B/)) { # Si $str contient une des balises que l'on veut 
-        $Go=1;
-        while($Go==1){  # Tant que l'on ne rencontre pas une nouvelle balise
-           chop($str=<F>);
-           if(($str eq "\.W") || ($str eq "\.B") || ($str eq "\.N") || ($str eq "\.A") || ($str eq "\.X") || ($str eq "\.K") || ($str eq "\.T") || ($str eq "\.I")){
-             $Go=0;
-#             break;
-           }
-           else{
-       $str2=lc($str);
-       $str2=~s/(\,|\=|\/|\.|\?|\'|\(|\)|\_|\$|\%|\+|\[|\]|\{|\}|\&|\;|\:|\~|\!|\"|\@|\#|\^|\*|\||\<|\>|\-|\\s|\\)//g;  #J'ai rajouté le "
-             print NF "$str "; # On écrit le contenu dans le fichier CACM-XX
-       print NF2 "$str2 ";
-           }
-        }
-     }
-     else{
-       chop($str=<F>);
-     }
+if (scalar @ARGV != 3) {
+  if (scalar @ARGV == 7) {
+    die "J'ai été agressé par un écureuil malfaisant!\n";
   }
-  close(F);
-  close(NF2);
-  close(NF);
-  close(COL);
+  else {
+    die "Wrong number of parameters!\nPlease give me:\n1)the subfile Path\n2)the shifting value(milliseconds)\n3)the path of the resulting file\n"
+  }
 }
 
 
+my $subFile = $ARGV[0];
+my $offset = $ARGV[1];
+my $newFile = $ARGV[2];
 
 
-sub CreerStopList($)
-{
-  my ($Common)=@_;
-  my $str="";
-  open(F,$Common) || die "Erreur CreerStopList\n";
-  while(!eof(F)){
+
+
+#Param 1 : String "hh:mm:ss,mss"
+#Param 2 : long millisecondes
+#return : string new time
+sub shiftTime($) {
+  my ($time) = @_;
+  my @t1 = split(/:|,/, $time);
+  
+
+  #total in ms
+  my $total = $t1[0]*3600000 + $t1[1]*60000 + $t1[2]*1000 + $t1[3] + $offset;
+
+  if($total < 0 || $total > 86400000) {
+    print "AAAARRRGHHHHHH What did you do to me??\n(tried to shift a subtitle too much)\n";
+  }
+
+
+  my $HH = int ($total/3600000);
+  my $mm = int ($total%3600000/60000);
+  my $ss = int ($total%3600000%60000/1000);
+  my $mss = $total%3600000%60000%1000;
+
+  return sprintf "%#.2d:%#.2d:%#.2d,%#.3d", $HH, $mm, $ss, $mss;
+}
+
+
+sub shiftLine($) {
+  my @str = split(/ --> /, $_[0]);
+  my $t1 = shiftTime($str[0]);
+  my $t2 = shiftTime($str[1]);
+
+  return "$t1 --> $t2";
+}
+
+
+sub ShiftEverything() {
+  open(F,"$subFile") || die "Couldn't open the file $subFile";
+  open(F2, ">$newFile") || die "Couldn't open the resulting file $newFile";
+
+  my $str = "";
+
+  while(!eof(F)) {
     chop($str=<F>);
-    $stopList{$str} = 1;
-  }
+    print F2 "$str\n";
 
-  close(F);
-}
-
-
-
-sub Filtre($)
-{
-  my ($FileName)=@_;
-  open(F,"$FileName.flt") || die "Erreur Filtre\n";
-  open(NF,">$FileName.stp");
-  my $str="";
-  my @line;
-  while(!eof(F)){
     chop($str=<F>);
-    @line=split " ", $str;
-    foreach my $word(@line){
-      if(!exists $stopList{$word}){
-        print NF "$word ";
-      }
-    }
+    $str = shiftLine($str);
+    print F2 "$str\n";
+
+    do {
+      chop($str=<F>);
+      print F2 "$str\n"
+      } while(!eof(F) && $str ne "");
   }
 
   close(F);
-  close(NF);
+  close(F2);
 }
 
 
 
-sub Filtres($)
-{
-  my ($Path)=@_;
 
-  my $FileName="";
-  open(COL,"$Path/$Collection") || die "Erreur Filtres\n";
-  while(!eof(COL)){
-    chop($FileName=<COL>);
-    Filtre("$Path/$FileName");
-  }
 
-  close(COL);
-
-}
+ShiftEverything();
