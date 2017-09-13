@@ -20,7 +20,6 @@ my $newFile = $ARGV[2];
 
 
 #Param 1 : String "hh:mm:ss,mss"
-#Param 2 : long millisecondes
 #return : string new time
 sub shiftTime($) {
   my ($time) = @_;
@@ -28,7 +27,7 @@ sub shiftTime($) {
   
 
   #total in ms
-  my $total = $t1[0]*3600000 + $t1[1]*60000 + $t1[2]*1000 + $t1[3] + $offset;
+  my $total = $t1[0]*3600000 + $t1[1]*60000 + $t1[2]*1000 + $t1[3] + $ARGV[1];
 
   if($total < 0 || $total > 86400000) {
     print "AAAARRRGHHHHHH What did you do to me??\n(tried to shift a subtitle too much)\n";
@@ -60,17 +59,18 @@ sub ShiftEverything() {
   my $str = "";
 
   while(!eof(F)) {
-    chop($str=<F>);
+    chomp($str=<F>);
     print F2 "$str\n";
 
-    chop($str=<F>);
+    chomp($str=<F>);
     $str = shiftLine($str);
     print F2 "$str\n";
 
     do {
-      chop($str=<F>);
-      print F2 "$str\n"
-      } while(!eof(F) && $str ne "");
+      chomp($str=<F>);
+      print F2 "$str\n";
+    } while(!eof(F) && !((length $str) == 1));
+
   }
 
   close(F);
