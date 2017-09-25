@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 
 public class Shifter implements _Shifter {
 
-  private final String script = "ressources/subShifter";  //path of the perlScript
+  private final String script = "ressources/subShifter2.0";  //path of the perlScript
 
   private final String subFilePath;   //path (whith name) of the srt file
 

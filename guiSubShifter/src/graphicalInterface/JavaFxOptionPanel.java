@@ -155,7 +155,7 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 			if(returnCode == 0) {
 				alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Success");
-//				alert.setHeaderText("Look, an Information Dialog");
+				alert.setHeaderText(null);
 				alert.setContentText("The subtitles have been modified with success!");
 
 				alert.showAndWait();
