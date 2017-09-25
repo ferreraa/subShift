@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 public class Shifter implements _Shifter {
 
   private final String script = "ressources/subShifter";  //path of the perlScript
-  
+
   private final String subFilePath;   //path (whith name) of the srt file
 
   private final String newPath;   //path (whith name) of the resulting file
@@ -18,8 +18,8 @@ public class Shifter implements _Shifter {
 	  this.offset = offset;
 	  this.newPath = newPath;
   }
-  
-  
+
+
   public int shift() {
     StringBuffer output = new StringBuffer();
 
@@ -37,7 +37,7 @@ public class Shifter implements _Shifter {
         output.append(line + "\n");
       }
 
-      
+
       System.out.println(output.toString());
 
       return p.exitValue();
@@ -47,5 +47,9 @@ public class Shifter implements _Shifter {
       return 255;
     }
 
-  }   
+  }
+
+  public static int shift(String srcPath, long offset, String destPath) {
+	  return (new Shifter(srcPath, offset, destPath)).shift();
+  }
 }

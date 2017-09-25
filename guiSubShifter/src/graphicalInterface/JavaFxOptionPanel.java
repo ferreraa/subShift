@@ -8,16 +8,18 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import kernel.Shifter;
 
 public class JavaFxOptionPanel extends Application implements EventHandler<ActionEvent>{
 
@@ -29,11 +31,15 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 	private Button browseDestButton;
 	private TextField destField;
 
+	//time offset. This will be a TextField only accepting numbers.
+	private TextField numberField;
+
 	//validate button
 	private Button validateButton;
 
 	//stage
 	private Stage primaryStage;
+
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -73,13 +79,9 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 		grid.add(browseDestButton, 2, 4);
 		browseDestButton.setOnAction(this);
 
-		TextField destField = new TextField();
+		destField = new TextField();
 		grid.add(destField, 1, 4);
 
-
-/*		Label _srt = new Label(".srt");
-		grid.add(_srt, 3, 4);
-*/
 
 		//Value of the requested time offset
 		Label timeOffset = new Label("define your time offset (ms)");
@@ -87,7 +89,7 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 
 
 		//number Field
-		TextField numberField = new TextField() {
+		numberField = new TextField() {
 			@Override public void replaceText(int start, int end, String text) {
 				if (text.matches("[0-9]*")) {
 					super.replaceText(start, end, text);
@@ -112,6 +114,7 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 		//validate Button
 		validateButton = new Button("Validate");
 		grid.add(validateButton, 1, 8);
+		validateButton.setOnAction(this);;
 
 
 		Scene scene = new Scene(grid, 350, 300);
@@ -129,21 +132,45 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 		if(e.getSource() == browseSrcButton || e.getSource() == browseDestButton) {
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Select subtitles File");
-			fileChooser.getExtensionFilters().addAll(
-			         new ExtensionFilter("Subtitles Files", "*.srt"));
+			fileChooser.getExtensionFilters().add
+				(new ExtensionFilter("Subtitles Files", "*.srt"));
 
-			File selectedFile = fileChooser.showOpenDialog(primaryStage);
-			if (selectedFile != null) {
-				String path = selectedFile.getAbsolutePath();
-				if (e.getSource() == browseSrcButton)
-					srcField.setText(path);
-				else
-					destField.setText(path);
+			File selectedFile;
+			if (e.getSource() == browseSrcButton) {
+				selectedFile = fileChooser.showOpenDialog(primaryStage);
+				if (selectedFile != null)
+					srcField.setText(selectedFile.getAbsolutePath());
+			}
+			else {
+				selectedFile = fileChooser.showSaveDialog(primaryStage);
+				if (selectedFile != null)
+					destField.setText(selectedFile.getAbsolutePath());
+			}
+
+		} else if (e.getSource() == validateButton) {
+			int returnCode = Shifter.shift(srcField.getText(), Long.parseLong(numberField.getText()), destField.getText());
+			System.out.println(returnCode);
+
+			Alert alert;
+			if(returnCode == 0) {
+				alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Success");
+//				alert.setHeaderText("Look, an Information Dialog");
+				alert.setContentText("The subtitles have been modified with success!");
+
+				alert.showAndWait();
+			}
+			else if (returnCode == 255){
+				alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Error");
+				alert.setHeaderText("Error 255");
+				alert.setContentText("One of the files couldn't be opened properly.");
+
+				alert.showAndWait();
 			}
 		}
-		else if (e.getSource() == validateButton) {
-			//tralala
-		}
+
+
 	}
 
 }
