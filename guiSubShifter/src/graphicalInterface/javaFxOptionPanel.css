@@ -49,6 +49,16 @@
 	src: url('../ressources/fonts/BEECH___.TTF');
 }
 
+@font-face {
+	font-family: Electric;
+	src: url('../ressources/fonts/electric.ttf');
+}
+
+@font-face {
+	font-family: Gobold;
+	src: url('../ressources/fonts/gobold/GoboldRegular.otf');
+}
+
 #title {
 	-fx-font-family: Chicory;
     -fx-font-size: 20px;
@@ -455,7 +465,7 @@
  *                                                                             *
  ******************************************************************************/
 .label {
-	-fx-font-family: Narmol;
+	-fx-font-family: Gobold;
 	-fx-font-size: 18px;
 /* 	-fx-text-fill: -fx-text-base-color; */
 }
