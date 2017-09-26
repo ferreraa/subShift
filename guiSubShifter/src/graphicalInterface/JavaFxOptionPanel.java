@@ -39,13 +39,16 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 	//validate button
 	private Button validateButton;
 
+	//Alerts creator. object that can generate specific alerts
+	private Alerts alertsCreator;
+
 	//stage
 	private Stage primaryStage;
-
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		this.primaryStage = primaryStage;
+		this.alertsCreator = new Alerts(primaryStage);
 
 		primaryStage.setTitle("Subtitles Shifter");
 
@@ -147,7 +150,7 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 		else if (e.getSource() == validateButton) {
 
 			if(numberField.getText().equals("") || srcField.getText().equals(""))
-				Alerts.incompleteForm();
+				alertsCreator.incompleteForm();
 			else {
 				selectedFile = fileChooser.showSaveDialog(primaryStage);
 				if (selectedFile != null) {
@@ -155,13 +158,13 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 					System.out.println(returnCode);
 
 					if(returnCode == 0) {
-						Alerts.success();
+						alertsCreator.success();
 					}
 					else if (returnCode == 2){
-						Alerts.fileOpeningIssue();
+						alertsCreator.fileOpeningIssue();
 					}
 					else {
-						Alerts.unexpectedError(returnCode);
+						alertsCreator.unexpectedError(returnCode);
 					}
 				}
 			}

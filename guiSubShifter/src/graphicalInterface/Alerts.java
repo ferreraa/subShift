@@ -8,8 +8,17 @@ import javafx.stage.Window;
 
 public class Alerts {
 
-	public static Alert createAlert(Alert.AlertType type, String message) {
+
+	private Window owner;
+
+	public Alerts(Window owner) {
+		this.owner = owner;
+	}
+
+	public Alert createAlert(Alert.AlertType type, String message) {
 	    Alert alert = new Alert(type);
+
+	    alert.initOwner(owner);
 
 	    StringBuilder sb = new StringBuilder(message);
 	    for (int i = 0; i < message.length(); i += 200) {
@@ -21,14 +30,14 @@ public class Alerts {
 	    return alert;
 	}
 
-	public static void incompleteForm() {
+	public void incompleteForm() {
 		Alert alert = createAlert(AlertType.ERROR, "Please enter a source file and an offset time.");
 		alert.setTitle("Incomplete form");
 		alert.setHeaderText(null);
 		alert.showAndWait();
 	}
 
-	public static void unexpectedError(int returnCode) {
+	public void unexpectedError(int returnCode) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Error");
 		alert.setHeaderText("Error " + returnCode);
@@ -36,7 +45,7 @@ public class Alerts {
 		alert.showAndWait();
 	}
 
-	public static void success() {
+	public void success() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Success");
 		alert.setHeaderText(null);
@@ -44,7 +53,7 @@ public class Alerts {
 		alert.showAndWait();
 	}
 
-	public static void fileOpeningIssue() {
+	public void fileOpeningIssue() {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle("Error");
 		alert.setHeaderText("Error 2");
