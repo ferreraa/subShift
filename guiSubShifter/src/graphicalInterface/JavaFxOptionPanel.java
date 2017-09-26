@@ -1,6 +1,10 @@
 package graphicalInterface;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -136,12 +140,18 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 	public void handle(ActionEvent e) {
 
 		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Select subtitles File");
+		fileChooser.getExtensionFilters().add
+			(new ExtensionFilter("Subtitles Files", "*.srt"));
+
 		File selectedFile;
+		String currentSrc = srcField.getText();
 
 		if(e.getSource() == browseSrcButton) {
-			fileChooser.setTitle("Select subtitles File");
-			fileChooser.getExtensionFilters().add
-				(new ExtensionFilter("Subtitles Files", "*.srt"));
+
+			if (!currentSrc.equals("")) {
+				fileChooser.setInitialDirectory(new File(currentSrc).getParentFile());
+			}
 
 			selectedFile = fileChooser.showOpenDialog(primaryStage);
 			if (selectedFile != null)
@@ -149,11 +159,19 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 		}
 		else if (e.getSource() == validateButton) {
 
-			if(numberField.getText().equals("") || srcField.getText().equals(""))
+			if(numberField.getText().equals("") || currentSrc.equals(""))
 				alertsCreator.incompleteForm();
 			else {
+				fileChooser.setInitialDirectory(new File(currentSrc).getParentFile());
 				selectedFile = fileChooser.showSaveDialog(primaryStage);
+
 				if (selectedFile != null) {
+					String destPath = selectedFile.getAbsolutePath();
+					if(!getExtension(selectedFile).equals(".srt") && ! (new File(destPath+".srt").exists())) {
+						selectedFile = new File(destPath+".srt");
+					}
+						System.out.println(selectedFile.renameTo(new File(destPath+".srt")));
+
 					int returnCode = Shifter.shift(srcField.getText(), Long.parseLong(numberField.getText()), selectedFile.getAbsolutePath());
 					System.out.println(returnCode);
 
@@ -171,5 +189,19 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 		}
 	}
 
+
+	private String getExtension (File file) {
+		String filePath = file.getAbsolutePath();
+		String extension = "";
+
+		int i = filePath.lastIndexOf('.');
+		int p = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
+
+		if (i > p) {
+		    extension = filePath.substring(i+1);
+		}
+		System.out.println(extension);
+		return extension;
+	}
 
 }

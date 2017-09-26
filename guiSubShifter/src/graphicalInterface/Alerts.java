@@ -38,26 +38,30 @@ public class Alerts {
 	}
 
 	public void unexpectedError(int returnCode) {
-		Alert alert = new Alert(AlertType.ERROR);
+		Alert alert = createAlert(AlertType.ERROR,"Unexpected error");
 		alert.setTitle("Error");
 		alert.setHeaderText("Error " + returnCode);
-		alert.setContentText("Unexpected error");
 		alert.showAndWait();
 	}
 
 	public void success() {
-		Alert alert = new Alert(AlertType.INFORMATION);
+		Alert alert = createAlert(AlertType.INFORMATION, "The subtitles have been modified with success!");
 		alert.setTitle("Success");
 		alert.setHeaderText(null);
-		alert.setContentText("The subtitles have been modified with success!");
 		alert.showAndWait();
 	}
 
 	public void fileOpeningIssue() {
-		Alert alert = new Alert(AlertType.ERROR);
+		Alert alert = createAlert(AlertType.ERROR, "One of the files couldn't be opened properly.");
 		alert.setTitle("Error");
 		alert.setHeaderText("Error 2");
-		alert.setContentText("One of the files couldn't be opened properly.");
+		alert.showAndWait();
+	}
+
+	public void renameFailed() {
+		Alert alert = createAlert(AlertType.WARNING, "I failed to add automatically add the .srt extension to the resulting file");
+		alert.setTitle("Renamin failure");
+		alert.setHeaderText(null);
 		alert.showAndWait();
 	}
 
