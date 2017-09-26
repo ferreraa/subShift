@@ -1,10 +1,6 @@
 package graphicalInterface;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -12,14 +8,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -163,15 +156,10 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 				alertsCreator.incompleteForm();
 			else {
 				fileChooser.setInitialDirectory(new File(currentSrc).getParentFile());
+				fileChooser.setInitialFileName("Untitled.srt");
 				selectedFile = fileChooser.showSaveDialog(primaryStage);
 
 				if (selectedFile != null) {
-					String destPath = selectedFile.getAbsolutePath();
-					if(!getExtension(selectedFile).equals(".srt") && ! (new File(destPath+".srt").exists())) {
-						selectedFile = new File(destPath+".srt");
-					}
-						System.out.println(selectedFile.renameTo(new File(destPath+".srt")));
-
 					int returnCode = Shifter.shift(srcField.getText(), Long.parseLong(numberField.getText()), selectedFile.getAbsolutePath());
 					System.out.println(returnCode);
 
@@ -190,18 +178,6 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 	}
 
 
-	private String getExtension (File file) {
-		String filePath = file.getAbsolutePath();
-		String extension = "";
 
-		int i = filePath.lastIndexOf('.');
-		int p = Math.max(filePath.lastIndexOf('/'), filePath.lastIndexOf('\\'));
-
-		if (i > p) {
-		    extension = filePath.substring(i+1);
-		}
-		System.out.println(extension);
-		return extension;
-	}
 
 }
