@@ -229,6 +229,8 @@
 
 .button:hover {
     -fx-background-color: linear-gradient(#2A5058, #61a2b1);
+    -fx-cursor:hand;
+
 }
 
 /*******************************************************************************
@@ -843,3 +845,19 @@
 .toolbar-colored .text {
 	-fx-fill: white;
 }
+
+/*******************************************************************************
+ *                                                                             *
+ * Dialogs		                       			  				   *
+ *                                                                             *
+ ******************************************************************************/
+
+/**Costumization of Buttons**/
+.dialog-pane .button{
+   -fx-background-color: black;
+   -fx-wrap-text: true;
+   -fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.30), 6.0, 0.3, 0,
+		1);
+   -fx-cursor:hand;
+ }
+
