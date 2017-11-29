@@ -1,4 +1,4 @@
-package graphicalInterface;
+package graphicalInterface.shifter;
 
 
 import javafx.scene.control.Alert;

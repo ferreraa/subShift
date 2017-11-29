@@ -1,4 +1,4 @@
-package graphicalInterface;
+package graphicalInterface.shifter;
 
 import javafx.application.Application;
 

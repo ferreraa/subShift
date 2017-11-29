@@ -1,4 +1,4 @@
-package graphicalInterface;
+package graphicalInterface.shifter;
 
 import java.io.File;
 
@@ -16,10 +16,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import kernel.shifter.JavaShifter;
+import kernel.shifter._Shifter;
 import javafx.stage.Stage;
-import kernel.JavaShifter;
-import kernel.Shifter;
-import kernel._Shifter;
 
 public class JavaFxOptionPanel extends Application implements EventHandler<ActionEvent>{
 

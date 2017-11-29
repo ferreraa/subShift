@@ -1,4 +1,4 @@
-package kernel;
+package kernel.shifter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import kernel._Shifter;
+import kernel.shifter._Shifter;
 
 public class JavaShifter implements _Shifter {
 

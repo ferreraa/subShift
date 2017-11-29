@@ -36,27 +36,27 @@
 
 @font-face {
 	font-family: Chicory;
-	src: url('../ressources/fonts/CHICORY_.TTF');
+	src: url('../../ressources/fonts/CHICORY_.TTF');
 }
 
 @font-face {
 	font-family: Narmol;
-	src: url('../ressources/fonts/normal.TTF');
+	src: url('../../ressources/fonts/normal.TTF');
 }
 
 @font-face {
 	font-family: Beech;
-	src: url('../ressources/fonts/BEECH___.TTF');
+	src: url('../../ressources/fonts/BEECH___.TTF');
 }
 
 @font-face {
 	font-family: Electric;
-	src: url('../ressources/fonts/electric.ttf');
+	src: url('../../ressources/fonts/electric.ttf');
 }
 
 @font-face {
 	font-family: Gobold;
-	src: url('../ressources/fonts/gobold/GoboldRegular.otf');
+	src: url('../../ressources/fonts/gobold/GoboldRegular.otf');
 }
 
 #title {

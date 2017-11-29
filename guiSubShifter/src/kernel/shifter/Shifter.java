@@ -1,4 +1,4 @@
-package kernel;
+package kernel.shifter;
 
 import java.io.BufferedReader;
 import java.io.File;
