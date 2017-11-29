@@ -17,7 +17,9 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import kernel.JavaShifter;
 import kernel.Shifter;
+import kernel._Shifter;
 
 public class JavaFxOptionPanel extends Application implements EventHandler<ActionEvent>{
 
@@ -160,14 +162,21 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 				selectedFile = fileChooser.showSaveDialog(primaryStage);
 
 				if (selectedFile != null) {
-					int returnCode = Shifter.shift(srcField.getText(), Long.parseLong(numberField.getText()), selectedFile.getAbsolutePath());
+					_Shifter shifter = new JavaShifter(srcField.getText(), Integer.parseInt(numberField.getText()), selectedFile.getAbsolutePath());
+					//int returnCode = Shifter.shift(srcField.getText(), Long.parseLong(numberField.getText()), selectedFile.getAbsolutePath());
+					int returnCode = shifter.shift();
 					System.out.println(returnCode);
+
+					//using the Perl script leads to changing the error codes
 
 					if(returnCode == 0) {
 						alertsCreator.success();
 					}
-					else if (returnCode == 2){
+					else if (returnCode == 1){
 						alertsCreator.fileOpeningIssue();
+					}
+					else if (returnCode == 2) {
+						alertsCreator.fileCreationIssue();
 					}
 					else {
 						alertsCreator.unexpectedError(returnCode);

@@ -54,6 +54,13 @@ public class Alerts {
 	public void fileOpeningIssue() {
 		Alert alert = createAlert(AlertType.ERROR, "One of the files couldn't be opened properly.");
 		alert.setTitle("Error");
+		alert.setHeaderText("Error 1");
+		alert.showAndWait();
+	}
+
+	public void fileCreationIssue() {
+		Alert alert = createAlert(AlertType.ERROR, "One or several files couldn't be created properly.");
+		alert.setTitle("Error");
 		alert.setHeaderText("Error 2");
 		alert.showAndWait();
 	}
