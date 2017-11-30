@@ -58,7 +58,6 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 
 		Text scenetitle = new Text("Shift your subtitles!");
 		grid.add(scenetitle, 0, 0, 2, 1);
-//		scenetitle.setFont(Font.loadFont(JavaFxOptionPanel.class.getResource("CHICORY_.TFF").toExternalForm(),60));
 		scenetitle.setId("title");
 
 
@@ -73,19 +72,6 @@ public class JavaFxOptionPanel extends Application implements EventHandler<Actio
 		grid.add(browseSrcButton, 2, 2);
 		browseSrcButton.setOnAction(this);
 
-
-		//Destination
-/*		Label targetedFolder = new Label("Generated file path:");
-		grid.add(targetedFolder, 0, 4);
-
-
-		browseDestButton = new Button("Browse destination file...");
-		grid.add(browseDestButton, 2, 4);
-		browseDestButton.setOnAction(this);
-
-		destField = new TextField();
-		grid.add(destField, 1, 4);
-*/
 
 		//Value of the requested time offset
 		Label timeOffset = new Label("define your time offset (ms):");
